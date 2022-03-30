@@ -2,6 +2,10 @@
 // bringing in the entire module/library
 // Sequelize needs pg just in case you were wondering 
 const Sequelize = require('sequelize');
+
+// faker is hving problems but casual is working a ok :)
+const casual = require('casual');
+
 // getting our string
 const { STRING } = Sequelize;
 // db most be a class, giving it our database adress (??) as well 
@@ -11,22 +15,51 @@ const db = new Sequelize(process.env.DATABASE_URL || 'postgres://postgres:JerryP
 const User = db.define('User', {
     email: {
         type: STRING,
-        allowNull: false
+        allowNull: false,
+        // Bamo like that sequelize gives you some useful functions
+        validate: {
+            isEmail: true
+        }
+    },
+    bio: {
+        type: STRING
     }
+});
+
+//  so this is the famous hook and seems like it should be very useful in validating data and such
+User.beforeSave( user => {
+    // why does this not need user.dataValues.bio... not a clue..
+    // check to see if it has a bio if not add one it is cool
+    if(!user.bio){
+        user.bio = `${user.email} BIO is ${casual.text}`
+    };
+    // console.log(user.bio);
 });
 
 // now with sequelize
 const syncAndSeed = async()=> {
     // I think this drops everything 
     await db.sync({force: true});
-    await User.create({ email: 'moe@gmail.com'});
+    // so a little less writing
+    await User.create({ email: 'moe@gmail.com', bio: "I am a bio"});
+    await User.create({ email: 'lucy@yahoo.com'});
+    await User.create({ email: 'curly@aol.com'});
 };
 
 const init = async()=> {
-    // this most be a sequelize thing, should probably look it up
-    await db.authenticate();
-    // has not changed
-    await syncAndSeed();
+    // try catch is always good here as things can go wrong
+    try {
+        // this most be a sequelize thing, should probably look it up
+        await db.authenticate();
+        // has not changed
+        await syncAndSeed();
+        // it gives you a bit more information
+        // console.log(await User.findAll());
+    }
+    catch(ex){
+        console.log(ex)
+    }    
+
 }
 
 init();
