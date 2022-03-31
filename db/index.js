@@ -31,7 +31,7 @@ User.beforeSave( user => {
     // why does this not need user.dataValues.bio... not a clue..
     // check to see if it has a bio if not add one it is cool
     if(!user.bio){
-        user.bio = `${user.email} BIO is ${casual.text}`
+        user.bio = `${user.email} BIO is ${casual.sentence}`
     };
     // console.log(user.bio);
 });

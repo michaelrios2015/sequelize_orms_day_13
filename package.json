@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon server.js"
+    "start:dev": "nodemon server.js",
+    "start:dev:sync": "SET SYNC=true & nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,7 @@
   "dependencies": {
     "casual": "^1.6.2",
     "express": "^4.17.3",
+    "method-override": "^3.0.0",
     "pg": "^8.7.3",
     "sequelize": "^6.17.0"
   },
