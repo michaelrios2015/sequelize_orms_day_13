@@ -83,7 +83,7 @@ app.get('/:id', async(req, res, next)=> {
                 <link rel = 'stylesheet' href = '/styles.css' />
             </head>
             <body>
-                <h1>Users ${ user.id }</h1>
+                <h1><a href='/'>Users</a> ${ user.id }</h1>
                 <ul>
                     <li>
                         <a href='/users/${ user.id }'>
